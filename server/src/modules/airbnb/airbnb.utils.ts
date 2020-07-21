@@ -16,3 +16,8 @@ export function sleep(time) {
     return new Promise((resolve, reject) => setTimeout(() => resolve(), time))
 
 }
+
+export const calcMapWeight = ({ availableDays = [], reviewsCount }: { availableDays: any, reviewsCount: any }) => {
+    const availableCnt = availableDays.filter((availableDay: any) => availableDay).length
+    return availableCnt + reviewsCount;
+}

@@ -3,19 +3,23 @@ import { GoogleApiWrapper } from "google-maps-react";
 import HeatMap from "google-maps-react/dist/components/HeatMap";
 import { MAP_GRADIENT } from "../constants";
 import { StMap } from "./styled";
-import { calcMapWeight } from "../utils";
+
+const defaultMapOptions = {
+    fullscreenControl: false,
+};
 
 function MapContainer({ google, cityData: { lat, lng }, listings }) {
-    const positions = listings.map(({ lat, lng, availableDays, reviews }) => ({
+    const positions = listings.map(({ lat, lng, weight }) => ({
         lat,
         lng,
-        weight: calcMapWeight({ availableDays, reviews })
+        weight
     }))
     return (
       <StMap
         google={google}
         initialCenter={{ lat: lat, lng: lng }}
-        zoom={14}
+        zoom={12}
+        defaultOptions={defaultMapOptions}
       >
           <HeatMap
             opacity={0.8}

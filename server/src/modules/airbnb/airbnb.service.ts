@@ -1,13 +1,15 @@
 import { HttpService, Injectable } from '@nestjs/common';
 import * as moment from 'moment';
 
-import { sleep } from "./airbnb.utils";
+import { calcMapWeight, sleep } from "./airbnb.utils";
 import { API_KEY, CALENDAR_DAYS_URL, CLIENT_ID, EXPLORE_TABS_PARAMS, EXPLORE_TABS_URL, REVIEWS_URL } from "./constant";
 
 @Injectable()
 export class AirbnbService {
     listings = [];
     loaded = false;
+    offset = 0;
+    lastListingIndex = 0;
     cityData = {
         name: '',
         lat: '',
@@ -28,17 +30,22 @@ export class AirbnbService {
             cityData: this.cityData,
             listings: this.listings,
             loaded: this.loaded,
+            offset: this.offset,
+            lastListingIndex: this.lastListingIndex,
         }
     }
 
     async loadPropsData() {
         for (let i = 0; i < this.listings.length; i++) {
             const listing = this.listings[i];
-            const { reviews = [], metadata: { reviews_count: reviewsCount } } = await this.getReview({ listingId: listing.id });
+            const { metadata: { reviews_count: reviewsCount } = { reviews_count: 0 } } = await this.getReview({ listingId: listing.id });
             const { calendar_days: calendarDays = [] } = await this.getCalendarDays({ listingId: listing.id });
             console.log('-----', i)
-            listing.reviews = { count: reviewsCount, data: reviews };
-            listing.availableDays = calendarDays.map(day => day.available);
+            this.lastListingIndex = i;
+            listing.weight = calcMapWeight({
+                reviewsCount,
+                availableDays: calendarDays.map(day => day.available)
+            })
         }
         return Promise.resolve(this.listings);
     }
@@ -91,6 +98,7 @@ export class AirbnbService {
             const listingsObj = sectionsObj.sections.find(section => section.result_type === 'listings') || {};
             const { listings = [] } = listingsObj;
             console.log('offset', offset)
+            this.offset = offset;
             const listingsArr = listings.map(({ listing: { id, lat, lng } }) => ({ id, lat, lng }));
             this.listings = [...this.listings, ...listingsArr]
 
