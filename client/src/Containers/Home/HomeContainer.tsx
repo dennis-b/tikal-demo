@@ -7,8 +7,7 @@ import { StHeader } from "./components/styled";
 import { Typography } from "@material-ui/core";
 
 export function HomeContainer() {
-    // const { isLoading, data } = useFetch("http://localhost:3003/listings");
-    const { isLoading, data } = useFetch("https://gentle-anchorage-17471.herokuapp.com/listings");
+    const { isLoading, data } = useFetch(`${process.env.REACT_APP_BASE_URL}/listings`);
 
     
     if (isLoading) {
