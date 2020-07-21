@@ -1,6 +1,6 @@
 # Description
 Application for displaying heat map airbnb listings.
-
+heat map weight  = listing number of reviews + lising number of avalibale days in upcoming month
 # Demo
 [https://evening-meadow-59739.herokuapp.com/](https://evening-meadow-59739.herokuapp.com/)
 
