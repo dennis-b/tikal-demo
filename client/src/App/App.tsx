@@ -5,11 +5,13 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import './App.css';
 import { client } from "../Apollo";
 import { HomeContainer } from "../Containers/Home/HomeContainer";
+import { GlobalStyle } from "../Components/GlobaStyle";
 
 export function App() {
     return (
         <ApolloProvider client={client}>
             <div className="App">
+                <GlobalStyle />
                 <Router>
                     <Switch>
                         <Route exact path="/">
