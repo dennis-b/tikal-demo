@@ -22,7 +22,7 @@ There are an property on listings api endpoint that indicates if the build of da
 ### Client
 
 ```bash
-$ cd server
+$ cd client
 $ yarn install 
 $ yarn start 
 ```
